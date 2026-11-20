@@ -1,0 +1,221 @@
+{
+  "title": "AI PM Accelerator — V3 shopper intent evaluation candidates",
+  "created": "2026-11-19",
+  "provenance": "Coach-authored synthetic cases and provisional extraction labels; not independently validated.",
+  "status": "DRAFT — only C01-C10 have provisional field-level annotations; C11-C20 require learner review; L21-L24 are future laptop cases.",
+  "cases": [
+    {
+      "id": "C01",
+      "phase": "calibration",
+      "theme": "Hard budget",
+      "query": "Wireless headphones. Must not exceed $150.",
+      "expect": {
+        "wireless": true,
+        "budget": 150,
+        "budgetType": "hard"
+      },
+      "note": "Explicit absolute cap; lexical phrasing variant"
+    },
+    {
+      "id": "C02",
+      "phase": "calibration",
+      "theme": "Hard budget",
+      "query": "Wireless headphones. No more than $150.",
+      "expect": {
+        "wireless": true,
+        "budget": 150,
+        "budgetType": "hard"
+      },
+      "note": "Same intent as C01; simpler phrasing"
+    },
+    {
+      "id": "C03",
+      "phase": "calibration",
+      "theme": "Flexible budget",
+      "query": "Wireless headphones. Ideally under $200, but I can spend more for better call quality.",
+      "expect": {
+        "wireless": true,
+        "budget": 200,
+        "budgetType": "flexible"
+      },
+      "note": "The budget must not be silently hardened; mic-linked stretch missing from V2B schema"
+    },
+    {
+      "id": "C04",
+      "phase": "calibration",
+      "theme": "Flexible budget",
+      "query": "Around $200 for wireless headphones and video calls.",
+      "expect": {
+        "wireless": true,
+        "calls": true,
+        "budget": 200,
+        "budgetType": "flexible"
+      },
+      "note": "Approximate spend without a cap"
+    },
+    {
+      "id": "C05",
+      "phase": "calibration",
+      "theme": "Hard + quality",
+      "query": "Must stay under $100 for headphones with great call quality.",
+      "expect": {
+        "budget": 100,
+        "budgetType": "hard",
+        "minMic": 4
+      },
+      "note": "Mic threshold is a test annotation, not validated user intent threshold"
+    },
+    {
+      "id": "C06",
+      "phase": "calibration",
+      "theme": "Soft form-factor preference",
+      "query": "I prefer earbuds, but over-ear headphones are fine if more comfortable.",
+      "expect": {
+        "form": null
+      },
+      "note": "Preference should not silently become hard form-factor eligibility"
+    },
+    {
+      "id": "C07",
+      "phase": "calibration",
+      "theme": "Negation",
+      "query": "I do not want over-ear headphones; they hurt my head.",
+      "expect": {
+        "avoidOverEar": true
+      },
+      "note": "Explicit avoid-over-ear"
+    },
+    {
+      "id": "C08",
+      "phase": "calibration",
+      "theme": "Connectivity",
+      "query": "I want wired headphones, no Bluetooth.",
+      "expect": {
+        "wired": true,
+        "wireless": false
+      },
+      "note": "Negative connectivity"
+    },
+    {
+      "id": "C09",
+      "phase": "calibration",
+      "theme": "Use case vs specification",
+      "query": "Headphones for calls in a noisy office, but I don't need ANC.",
+      "expect": {
+        "calls": true,
+        "noAnc": true
+      },
+      "note": "Noisy office does not make ANC hard; preserve context separately"
+    },
+    {
+      "id": "C10",
+      "phase": "calibration",
+      "theme": "Use case + device switching",
+      "query": "I travel and switch between my laptop and phone; need wireless headphones.",
+      "expect": {
+        "travel": true,
+        "multi": true,
+        "wireless": true
+      },
+      "note": "Device switching explicitly desired"
+    },
+    {
+      "id": "C11",
+      "phase": "review",
+      "theme": "Multiple budget values",
+      "query": "I prefer spending under $200 but could go to $225 for a noticeably better microphone.",
+      "note": "Annotate preferred vs ceiling and whether 225 is hard/flexible"
+    },
+    {
+      "id": "C12",
+      "phase": "review",
+      "theme": "Subjective comfort",
+      "query": "I need a headset for six hours of video calls; tight headphones give me headaches.",
+      "note": "Should fit concern become a hard constraint or high-priority, uncertain preference?"
+    },
+    {
+      "id": "C13",
+      "phase": "review",
+      "theme": "Optional spec",
+      "query": "Bluetooth headphones; ANC would be nice, but isn't necessary.",
+      "note": "Don't treat optional ANC as required; decide best representation"
+    },
+    {
+      "id": "C14",
+      "phase": "review",
+      "theme": "Category mismatch",
+      "query": "No headphones please: I need a desktop microphone for meetings.",
+      "note": "Should system abstain, clarify or show headphones?"
+    },
+    {
+      "id": "C15",
+      "phase": "review",
+      "theme": "No-match",
+      "query": "Excellent ANC and excellent microphone quality, strictly under $60. Must have both.",
+      "note": "Check candidate evidence; don't silently relax hard requests"
+    },
+    {
+      "id": "C16",
+      "phase": "review",
+      "theme": "Alternative requirements",
+      "query": "Either exceptional ANC or a great microphone is sufficient; I don't need both.",
+      "note": "Represent OR branch rather than two AND requirements"
+    },
+    {
+      "id": "C17",
+      "phase": "review",
+      "theme": "Missing or subjective evidence",
+      "query": "Wireless headphones that are guaranteed not to cause headaches even after eight hours.",
+      "note": "Do not invent a fit guarantee; define abstain/clarify policy"
+    },
+    {
+      "id": "C18",
+      "phase": "review",
+      "theme": "Synonymous device switching",
+      "query": "Headphones for switching seamlessly between my Mac and iPhone, under $250.",
+      "note": "Mac+iPhone may imply multipoint; test lexical robustness"
+    },
+    {
+      "id": "C19",
+      "phase": "review",
+      "theme": "Hard ceiling plus target budget",
+      "query": "Ideally around $200, but don't show me anything over $215. Wireless headphones for calls.",
+      "note": "Preserve both preferred amount and actual hard maximum"
+    },
+    {
+      "id": "C20",
+      "phase": "review",
+      "theme": "Unsupported attribute",
+      "query": "Wired headphones with neutral studio sound and no bass boost.",
+      "note": "Disclose missing evidence vs silently claiming sound-signature fit"
+    },
+    {
+      "id": "L21",
+      "phase": "future",
+      "theme": "Laptop use-case extraction",
+      "query": "I edit short videos and travel weekly. Need a lightweight laptop under $1300; battery life matters more than gaming.",
+      "note": "Future laptop evaluator; not a fair headphones V2B comparison"
+    },
+    {
+      "id": "L22",
+      "phase": "future",
+      "theme": "Laptop soft vs hard",
+      "query": "Ideally under $1000 for a laptop, but up to $1200 if it reliably handles two external monitors.",
+      "note": "Multiple caps, display support and data sufficiency"
+    },
+    {
+      "id": "L23",
+      "phase": "future",
+      "theme": "Laptop compatibility",
+      "query": "I must run Windows-only software, need 16 GB memory, and I'd prefer a Mac-looking laptop.",
+      "note": "Operating system hard constraint vs aesthetic preference"
+    },
+    {
+      "id": "L24",
+      "phase": "future",
+      "theme": "Laptop ambiguity",
+      "query": "I need a laptop for my daughter who studies design, light enough for a commute, affordable but not slow.",
+      "note": "Ambiguous price, workload and performance criteria"
+    }
+  ]
+}
