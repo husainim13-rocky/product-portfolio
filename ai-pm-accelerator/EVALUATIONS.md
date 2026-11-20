@@ -44,3 +44,22 @@ The engine captures `calls = true` and `comfort = true` but does not separately 
 - Preserve a held-out set for later V3 comparison and label all synthetic data provenance clearly.
 - Test a minimal rules-only fix against a structured LLM extraction path without changing the ranking/eligibility system.
 - Report counts and denominators; no percentage improvements until the benchmark has actually run.
+
+## Day 1 continuation — Recommendation/clarification UX-policy comparison (Nov 19, 2026)
+
+**Question:** The shopper prefers $200 or less but explicitly may exceed it for a better microphone. Should the merchant recommend immediately, clarify maximum budget first, or only show under-budget products?
+
+**Reproduction:** `node ai-pm-accelerator/evals/day1-ux-policy-probe.cjs`. Executed the archived engine with corrected flexible budget and specified mic priority, then compared deliberately simple selection policies. This is a *simulation*, not a deployed UX, model A/B test, or shopper study.
+
+| Case | Budget-first C | Unconditional stretch A | Conditional stretch A' | Clarify-first B |
+| --- | --- | --- | --- | --- |
+| Actual 42-product synthetic catalog | MeetMax $199, ClearCall One $129, OfficeLink Max $179 | MeetMax $199, ClearCall One $129, **Focus 300 $299** despite no mic/comfort/ANC rating improvement over MeetMax | MeetMax $199, ClearCall One $129; **no premium offer** | Not behaviorally tested; shopper receives a budget question instead of immediate options |
+| Constructed four-product test catalog | Daily Work $190 (mic 4), Basic Meeting $170 (mic 3) | Both plus Clear Voice Plus $229 (mic 5) | Both plus Clear Voice Plus $229 (mic 5, no lower comfort rating) | Not behaviorally tested |
+
+Actual catalog: 31 eligible products, 28 within $200, 3 above. In the first scenario, MeetMax $199 has builder-selected mic 5, comfort 5, ANC 5, identical on these ratings to Focus 300 $299. The naive A approach can thus upsell without relevant evidence. The constructed catalog illustrates when a modest premium could improve the specifically stated microphone priority.
+
+**Assertions:** Four scenario assertions passed on the simulation code. This establishes descriptive policy behavior only, not actual user task success, trust, conversion or latency effects.
+
+**Open PM trade-off:** The shopper has not stated an acceptable maximum stretch. A provisional policy would show in-budget options first, add premium only when there is an evidence-backed improvement in a stated priority, clearly label price difference, and retain hard caps. A large premium, missing or subjective evidence, and conflicting trade-offs need an opt-in/clarification policy. Thresholds are not established by these synthetic experiments.
+
+**Future comparison:** With real shopper participants, measure valid shortlist rate, time to useful answer, unnecessary premium exposure, clarification burden, trust and abandonment. Do not overclaim from synthetic ratings. Compare A' against C and B, with high- and low-budget uncertainty cases.
