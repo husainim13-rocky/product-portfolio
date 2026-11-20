@@ -63,3 +63,20 @@ Actual catalog: 31 eligible products, 28 within $200, 3 above. In the first scen
 **Open PM trade-off:** The shopper has not stated an acceptable maximum stretch. A provisional policy would show in-budget options first, add premium only when there is an evidence-backed improvement in a stated priority, clearly label price difference, and retain hard caps. A large premium, missing or subjective evidence, and conflicting trade-offs need an opt-in/clarification policy. Thresholds are not established by these synthetic experiments.
 
 **Future comparison:** With real shopper participants, measure valid shortlist rate, time to useful answer, unnecessary premium exposure, clarification burden, trust and abandonment. Do not overclaim from synthetic ratings. Compare A' against C and B, with high- and low-budget uncertainty cases.
+
+## Day 1 benchmark starter — November 19, 2026
+
+**Artifacts:** `evals/intent-cases-v0.json` (24 coach-authored synthetic cases; 10 provisionally annotated calibration examples, 10 for PM review, four future laptop scenarios); `evals/run-intent-calibration.cjs` (repeatable executable). Run from repository root: `node ai-pm-accelerator/evals/run-intent-calibration.cjs`.
+
+**Observed V2B calibration:** 6/10 cases matched every annotated field, with 20/25 individual field comparisons matching. Four failing cases, five missed comparisons:
+
+| ID | Expected intent | V2B observed | Downstream observed |
+|---|---|---|---|
+| C01 | `budget=150, budgetType=hard` for 'must not exceed $150' | `budget=null, budgetType=null` | Returned in-budget top 3 on this specific catalog by coincidence; potential unguarded overspend remains |
+| C03 | `budgetType=flexible` for 'ideally under $200, can spend more' | `budgetType=hard` | Returned within-budget options; premium alternatives incorrectly excluded |
+| C06 | `form=null` as a *hard filter* because earbuds merely preferred; over-ear explicitly allowed | `form=in-ear` | Returned exclusively in-ear recommendations, suppressing an allowed category |
+| C08 | `wired=true, wireless=false` for 'wired headphones, no Bluetooth' | `wired=true, wireless=true` | Returned **conflict** asking shopper to resolve a contradiction created by the parser |
+
+**Important qualification:** All expected labels were written by the coach and are **provisional**, not approved by the learner or independently annotated. The 20/25 result is not a reliable population accuracy estimate; field-level comparisons are neither independent nor uniformly weighted. Compare solutions only against a reviewed dataset with realistic scenarios, independent held-out cases, and downstream outcome checks.
+
+**PM prioritization needed:** Which failure merits first investment? Consider frequency, severity, customer harm, technical effort, observability and whether the architecture fix generalizes. High severity (e.g., inventing contradictions or ignoring absolute caps) does not automatically imply an LLM is required; simple rules may fix isolated patterns.
