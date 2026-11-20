@@ -86,3 +86,14 @@ Baseline evaluation shows intent parsing is not the main failure source, or a no
 **Open decision:** Define whether/when to show premium recommendations above the preferred price when the shopper has not named a hard maximum. Validate the threshold, rather than inventing a universal overage allowance.
 
 **Reproduction:** `ai-pm-accelerator/evals/day1-ux-policy-probe.cjs` and `ai-pm-accelerator/EVALUATIONS.md`.
+
+### ADR-003 clarification after PM challenge (November 19, 2026)
+
+**Correction accepted:** The learner's original Strategy A was **not** unconditional premium placement. It explicitly included a premium alternative **only if its advantages justify the extra cost**. The initial naive 2-under-budget + 1-premium simulation deliberately removed that condition, so it is a counterexample to a poor implementation, *not* a refutation of the learner's recommendation policy.
+
+**Refined principle:** We are selecting a **useful shortlist**, not one winning product and not a fixed mix of price tiers. Show both the $190 in-budget option (mic 4/5) and $229 stretch option (mic 5/5) when the shopper is open to spending more for mic performance and the synthetic attribute evidence supports a meaningful trade-off. No clarification is automatically required merely because a product exceeds a *flexible* preferred budget.
+
+**Nuanced exclusion question:** A $299 alternative with the same catalog microphone, comfort and ANC scores as a $199 option is not categorically forbidden. It should only be shown when additional credible product evidence or another decision-relevant dimension justifies taking a slot in the shortlist. Evaluate incremental decision value, redundancy, position in a limited results set, explanation quality, and trust rather than assuming all premium exposure is harmful.
+
+**Unresolved:** Define shortlist size/dynamic stopping rules, meaningful differentiation thresholds, acceptable disclosure and shopper-controlled stretch policy. No shopper study has established which set composition is most useful.
+
