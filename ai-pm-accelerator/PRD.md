@@ -59,3 +59,7 @@ An agent marketplace, automated purchasing, MCP/UCP protocol interoperability, p
 - Shopper scenario annotations and source-level/audited V2B failures.
 - Confirmation of primary success metric and qualification thresholds.
 - Comparative architecture hypotheses and PM teach-back.
+
+## Baseline audit update (November 19, 2026)
+
+The V2B source engine was executed against 10 provisional, synthetic, field-annotated shopper prompts: 6/10 examples had all checked fields correct and 20/25 checked intent fields matched. This is a **small diagnostic baseline**, not a robust accuracy estimate or a measured V3 gain. Four code-level failures include: ignoring 'must not exceed $150'; treating 'ideally under $200' as hard; incorrectly enforcing a preferred in-ear form factor; and interpreting 'wired, no Bluetooth' as conflicting wired+wireless requirements. A full customer-impact diagnosis and learner review remain outstanding. See `EVALUATIONS.md` and `evals/intent-cases-v0.json`.
