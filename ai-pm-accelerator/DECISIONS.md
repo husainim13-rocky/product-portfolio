@@ -72,3 +72,17 @@ Evaluate all against the **same** frozen shopper requests with error taxonomy.
 ### Revisit when
 Baseline evaluation shows intent parsing is not the main failure source, or a non-LLM fix achieves comparable improvement at materially lower cost/latency.
 
+
+## ADR-003 — Provisional UX policy: recommendations before budget clarification, but no unjustified upsell
+
+**Date:** 2026-11-19 (Day 1 coaching continuation)
+**Status:** **Proposed, awaiting learner's final guardrail/exception decision**
+**User-selected direction:** Strategy A: show helpful recommendations immediately, with stretch options if appropriate. Avoid delaying all recommendations for a question about an unspecified maximum spend.
+
+**Challenge:** Willingness to consider a higher price is not evidence that the more expensive product improves fit. An unconditional 2-under-budget + 1-premium slot suggested $299 Focus 300 even though the $199 MeetMax had the same catalog mic, ANC and comfort ratings. In a constructed synthetic catalog, a $229 product did improve stated microphone priority relative to $190 options.
+
+**Proposed guardrails:** Treat explicitly flexible budgets as preferences, retain the preferred amount in presentation, show price differences visibly, do not show a premium option without defensible incremental value on a relevant attribute, never violate explicit hard caps, and do not fabricate subjective comfort claims. If the extra price is substantial, consider opt-in clarification or reveal-on-request rather than presuming an unlimited stretch.
+
+**Open decision:** Define whether/when to show premium recommendations above the preferred price when the shopper has not named a hard maximum. Validate the threshold, rather than inventing a universal overage allowance.
+
+**Reproduction:** `ai-pm-accelerator/evals/day1-ux-policy-probe.cjs` and `ai-pm-accelerator/EVALUATIONS.md`.
