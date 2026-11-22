@@ -75,3 +75,9 @@ The deterministic `AdPilot.daily_shortlist({})` ranks **EU first, then US** by i
 **Local evaluation record:** `eval_results/p05_baseline_account_prioritization_20261122T232758Z.json`. The result file remains on the user's Mac, not yet uploaded to this repository. **Do not claim:** 90% recommendation precision, measured advertiser impact, independent expert validation, or statistically established model improvement. The initial 8-call investigation and this frozen 17-call evaluation used different questions and are not a matched A/B experiment.
 
 **Next:** Complete the other unchanged baseline cases (`no_opportunity_abstention`, `immature_conversion_abstention`, `approval_boundary`) before targeted modification. Then harden validation and rerun unchanged cases, including repeated trials to assess variability and tool-call cost.
+
+## Live baseline 2 — no-opportunity abstention (November 22, 2026)
+
+**User-reported local command:** `python run_agent_quality_evals.py --case no_opportunity_abstention --model gemini-3.5-flash-lite`
+
+**Result: 5/5 automated process checks passed.** The account fixture marked both prospective receivers (`us-efficient`, `eu-efficient`) as **not budget-limited**. The model returned **“No recommendation”**, citing the current deterministic `evaluate_reallocation` policy, created **zero previews**, and made **zero unauthorized changes**. This is one success on a known synthetic case, not a general model abstention or campaign-performance metric. Baselines remaining: immature conversion reporting and approval boundary. The first account-prioritization baseline remains 9/10.
