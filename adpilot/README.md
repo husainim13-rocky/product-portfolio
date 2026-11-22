@@ -21,7 +21,7 @@ The local Python starter adds OpenAI Agents SDK tools, a Streamlit app, preview/
 ## Architecture
 `Agent + Runner` → Python `@function_tool` investigation tools → deterministic campaign metrics/policy → non-executing budget preview → separate human approval → synthetic in-session update and audit.
 
-The complete runnable starter package has been generated locally and will be synchronized into this GitHub project after the first live model-run validation. The files in this directory are **currently documentation, not yet the full runnable codebase**. The public website is hosted separately from this GitHub repository; a new AdPilot project card has **not yet been deployed** to that site.
+The complete runnable starter package has been generated locally and will be synchronized into this GitHub project after the first live model-run validation. This directory currently contains project documentation, a **partial SDK agent runtime code example**, and dependency declarations; it is **not yet the full runnable codebase**. The public website is hosted separately from this GitHub repository; a new AdPilot project card has **not yet been deployed** to that site.
 
 ## Next milestones
 1. Run the agent with a valid API key, capture actual tool traces and fix orchestration errors.
