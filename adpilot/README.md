@@ -37,8 +37,10 @@ Planned improvement: freeze scenarios, score tool coverage and grounded claims, 
 **Cost lesson:** Gemini was used with a new Google AI Studio key without purchasing OpenAI API credits or enabling paid billing. This is a limited hosted free allowance, not a claim of unlimited free inference or audited $0 costs. Do not commit API keys; monitor quotas before public hosting.
 
 ## Repository vs live site
-The [static AdPilot case-study source](../dist/adpilot/index.html) has been added to this repository, but **the separate [live portfolio website](https://husain-motiwala-product-portfolio.husain-im13.chatgpt.site/) has not yet been republished with this page**. The full runnable local AdPilot app source has also **not yet been synchronized** into this GitHub directory; its current `agent_runtime.py` is a partial example, not a deployable project.
+The [AdPilot case study is now published on the existing live portfolio](https://husain-motiwala-product-portfolio.husain-im13.chatgpt.site/adpilot/) as of November 22, 2026, following a Work-mode update. The [static source](../dist/adpilot/index.html) and [public status feed](status.json) are also stored in GitHub; do not assume live Site auto-sync without verification. The full runnable local AdPilot app source has also **not yet been synchronized** into this GitHub directory; its current `agent_runtime.py` is a partial example, not a deployable project.
 
-Next: evaluate and improve the agent, synchronize complete code without secrets, deploy a bounded public demo, and publish the AdPilot card in the independently hosted portfolio.
+Next: securely synchronize the complete runnable local code (without API keys or .venv), establish reproducible agent evaluation, improve evidence coverage, and deploy a bounded public demo.
+
+**Portfolio release checklist:** Whenever we complete meaningful new verified functionality, a measured P0.5 evaluation improvement or a public-demo milestone, remind the user to switch to **Work mode** and update/republish the existing ChatGPT Site. Routine internal commits need no Site update.
 
 **Limitations:** synthetic campaigns, frozen November 2026 metrics, simplified reporting maturity, unknown auction opportunity, unvalidated marginal CPA, no external user study, no demonstrated time savings, and no real CPA lift.
