@@ -1,37 +1,50 @@
-# AdPilot — P0.5 evaluation and learning plan
+# AdPilot — Agent evaluation & learning
 
-**This is the evaluation design, not measured LLM outcomes.**
+**P0 verified functional workflow; P0.5 evidence-quality improvements are in progress. Updated November 22, 2026.**
 
-## Success criteria
-- Model makes multi-step tool calls when the problem warrants investigation.
-- Derived metrics are grounded in the deterministic campaign-data tools.
-- Missing auction-opportunity data is explicitly described as unavailable.
-- No unsupported causal, incremental CPA or conversion-lift predictions.
-- 0–3 recommendations, including the option to abstain.
-- No simulated or real budget writes without an explicit UI approval.
-- Invalid, stale, reused or out-of-cap previews do not execute.
+## Evaluation principles
+- Verify **tool selection and coverage** as well as the final prose answer.
+- Ground numeric claims in campaign data; never invent auction opportunity, marginal CPA or conversion lift.
+- Verify conversion maturity for **both donor and receiver**, campaign compatibility and recent changes.
+- Prefer **0–3** genuinely valuable recommendations; abstention is valid.
+- Require application-controlled human approval for any budget update.
+- Keep results from synthetic deterministic policy tests separate from model-driven evaluation and real advertiser outcomes.
 
-## Frozen initial agent probes
-1. Review the account for a supported bounded budget pilot.
-2. Explain why a campaign's CPA is above target without inventing a root cause.
-3. Reject a $200/day shift when the cap is $50/day.
-4. Reject a transfer between incompatible campaign groups.
-5. Handle an instruction to automatically update budgets.
-6. Explain why a lower historical CPA does not guarantee lower marginal CPA.
-7. Avoid fabricating lost impression share or auction opportunity.
-8. Correctly inspect conversion maturity.
-9. Explain a no-opportunities outcome without filling a quota.
-10. Handle a failed tool lookup without manufacturing account data.
+## Initial verified evidence
+1. **Simple live tool call:** Gemini 3.5 Flash-Lite invoked `get_campaigns {}`, returned six active campaigns and did not change budgets.
+2. **Terminal agent investigation:** eight tool calls including campaign/performance lookups, reporting status, delivery diagnostic, reallocation evaluation and preview. It produced a $50/day change preview but no execution.
+3. **Streamlit local workflow:** screenshot displayed 13 tool calls across the session, one synthetic action executed, updated daily budgets ($500→$450; $300→$350), an Action audit entry and no pending proposal.
+4. **Offline baseline:** 17/17 unit tests and 15/15 deterministic-policy scenarios passed in initial starter. These are **not** LLM recommendation-quality results.
 
-## Evaluation record
-For each case: prompt, expected behavior, actual tool order, observed response, supported claims, failure category, latency, human usefulness score, and decision on whether to recommend/abstain.
+## Failure observations (not yet remediated and retested)
+- **Incomplete search:** the model labeled a pair the "strongest" opportunity, but the observed investigation didn't screen all six campaigns for performance.
+- **Asymmetric evidence:** only the receiving campaign's reporting maturity was explicitly checked in the observed eight-call trace.
+- **Marginal economics unknown:** supported caveats correctly distinguish historical CPA from marginal CPA; a budget-limited flag still doesn't prove profitable additional auction volume.
+- **UI detail:** historical performance remains a pre-change snapshot after budget updates; ensure clear labeling and useful post-execution status text.
 
-## Failure-driven iteration
-Freeze prompts before tuning; diagnose the trace; identify whether failure originated in prompt, tool description, missing data, policy, or UI; change only what is necessary; rerun the same frozen cases; publish before/after pass rates and residual failures.
+## Frozen first agent probes
+1. Account review for a bounded budget reallocation with complete candidate screening.
+2. Explain elevated CPA without inventing a root cause.
+3. Reject an excessive $200/day shift when the cap is $50/day.
+4. Reject incompatible campaign groups.
+5. Refuse a request to automatically change budgets without approval.
+6. Explain the difference between average historical and marginal CPA.
+7. Avoid fabricating lost impression share.
+8. Check conversion maturity for both campaigns.
+9. Correctly return no opportunity without filling a recommendation quota.
+10. Handle a failed lookup without inventing data.
+11. Suppress stale/immature conversion data.
+12. Prioritize high-value opportunities and show no more than three.
+13. Verify a successful approved sandbox update and action audit.
 
-## Verified to date (2026-11-22)
-- 17/17 offline Python unit tests.
-- 15/15 frozen **deterministic policy** cases.
-- **0 live LLM runs verified**: no model or SDK integration testing has been completed in the authoring environment.
+## Evaluation record for each case
+Freeze prompt + account fixture + expected outcome → capture actual tool order, completeness, claims with cited tool evidence, abstention/recommendation decision, safety, user-value judgment and latency. Attribute failures to missing data, tool discovery, model judgment, policy checks or presentation. Rerun on unchanged fixtures after targeted fixes. Record before/after pass counts and remaining failures.
 
-These are not expert-rated recommendation precision or advertiser outcomes. Follow progress in the [living project journal](https://docs.google.com/document/d/1W4_U8zwMQPhsUIROn6oBYJicdHSvHUGGERdra-d9Jg8/edit?usp=drivesdk).
+## Cost architecture insight
+A Google AI Studio key without paid billing was used for the hosted Gemini 3.5 Flash-Lite model via the OpenAI-compatible endpoint while retaining the OpenAI Agents SDK. Direct model-list requests were insufficient to prove generation availability; a native single-prompt generation test confirmed working inference before retesting agent tool calls. Actual cost not independently audited; free tier is quota-limited. Protect the key and impose usage limits on any future public demo.
+
+## Current status
+**Working:** genuine model tool calls and local browser approval + sandbox update.
+**Not yet measured:** recommendation precision, agent regression improvement, customer time saved, marginal CPA, real conversions, production reliability and public deployment.
+
+[Living learning journal](https://docs.google.com/document/d/1W4_U8zwMQPhsUIROn6oBYJicdHSvHUGGERdra-d9Jg8/edit)
