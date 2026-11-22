@@ -48,3 +48,16 @@ A Google AI Studio key without paid billing was used for the hosted Gemini 3.5 F
 **Not yet measured:** recommendation precision, agent regression improvement, customer time saved, marginal CPA, real conversions, production reliability and public deployment.
 
 [Living learning journal](https://docs.google.com/document/d/1W4_U8zwMQPhsUIROn6oBYJicdHSvHUGGERdra-d9Jg8/edit)
+
+## P0.5 deterministic comparison discovery — November 22, 2026
+
+The synthetic account contains **two** eligible transfer pilots under the existing engine policy, not just the US pair that the first LLM trace selected:
+
+| Candidate | Donor CPA | Receiver CPA | Priority index | Approved-pilot cap |
+| --- | ---: | ---: | ---: | ---: |
+| US: us-high → us-efficient | $70.00 | $40.00 | 0.60 | $50/day |
+| EU: eu-high → eu-efficient | $70.00 | $37.50 | **0.65** | $25/day |
+
+The deterministic `AdPilot.daily_shortlist({})` ranks **EU first, then US** by its current `priority_index` heuristic. Therefore the LLM's earlier statement that the US pair was the strongest is **not substantiated under its own current ranking policy**. This is a useful process failure, but **not evidence EU is truly more profitable**: the score is not a causal lift estimate, and transfer sizes differ.
+
+**Frozen live-agent P0.5 baseline package created:** `AdPilot_P05_Quality_Eval_Patch.zip` in the conversation. It installs two files into the user's existing working local `adpilot_v1` project: `run_agent_quality_evals.py` and `data/agent_quality_scenarios.json`. The first case checks all-six performance coverage, both pair evaluations, symmetric reporting/delivery evidence, pre-preview checks and current-policy ranking. Additional cases test abstention with no opportunity, immature conversion reporting and the human-approval boundary. The eval script records full tool traces and response text; it does not modify the existing agent or budgets. **No live P0.5 evaluation has yet been run against these new probes; no scored quality improvement is claimed.**
