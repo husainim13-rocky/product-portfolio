@@ -21,12 +21,32 @@
   </header>
 
   <main>
-    <section id="projects"><div class="wrap"><div class="section-head"><h2>Featured project</h2><p>A working AI product case study built with synthetic data. It demonstrates requirement extraction, constraint handling, intent-aware ranking, clarification, honest failure states, and evaluation against a keyword baseline.</p></div>
+    <section id="projects"><div class="wrap"><div class="section-head"><h2>Personal projects</h2><p>Two independently built AI product case studies: intent-aware discovery and an agentic advertising copilot. Each shows product judgment, technical implementation, evaluation evidence and limitations.</p></div>
       <article class="project">
         <div class="project-top"><div><div class="label">Intent-Aware Product Discovery · V2A</div><h3>From a nuanced need to an explainable shortlist</h3><p>A shopper describes a situation in natural language. The experience converts it into explicit requirements, identifies unresolved decisions, ranks a 42-product synthetic headphones catalog, and explains why each result fits and where it compromises.</p><div class="project-links"><a href="/demo/">Open interactive demo</a><a href="#evaluation">See evaluation</a></div></div>
           <div class="metrics"><div class="metric"><strong>100%</strong><span>hard-constraint pass rate</span></div><div class="metric"><strong>80%</strong><span>top-three relevance</span></div><div class="metric"><strong>0.875</strong><span>mean reciprocal rank</span></div></div>
         </div>
         <div class="story"><div><h4>Problem</h4><p>Keyword search misses the relationships between budget, context, comfort, and quality.</p></div><div><h4>Product decision</h4><p>Separate hard constraints from preferences, and ask one question only when its answer changes the decision.</p></div><div><h4>Evidence</h4><p>On 20 frozen queries, top-three relevance improved from 65% to 80% versus the baseline.</p></div><div><h4>Current limitation</h4><p>Rule coverage is sensitive to wording, and unsupported catalog attributes still need a clearer response.</p></div></div>
+      </article>
+      <article class="project" style="margin-top:22px" id="adpilot-project">
+        <div class="project-top"><div>
+          <div class="label" id="adpilot-stage">AdPilot · Agentic Ads AI · P0 working locally, P0.5 in progress</div>
+          <h3>From campaign investigation to a safe, approved optimization</h3>
+          <p id="adpilot-summary">A real tool-calling LLM investigates a synthetic advertising account, identifies a bounded budget optimization opportunity, explains uncertainty, and prepares a change that only an advertiser can approve.</p>
+          <div class="project-links"><a href="/adpilot/">Read the AdPilot case study</a><a href="https://github.com/husainim13-rocky/product-portfolio/tree/main/adpilot" id="adpilot-github" target="_blank" rel="noopener noreferrer">Technical GitHub</a><a href="https://docs.google.com/document/d/1W4_U8zwMQPhsUIROn6oBYJicdHSvHUGGERdra-d9Jg8/edit" target="_blank" rel="noopener noreferrer">Learning journal</a></div>
+          <p style="font-size:.85rem;color:#52656a" id="adpilot-last-updated">Local Streamlit demo, synthetic campaigns only · Updated November 22, 2026</p>
+        </div>
+        <div class="metrics">
+          <div class="metric"><strong>8</strong><span>tools called in one live LLM investigation</span></div>
+          <div class="metric"><strong>1</strong><span>human-approved synthetic budget change</span></div>
+          <div class="metric"><strong>$800</strong><span>combined daily budget preserved</span></div>
+        </div></div>
+        <div class="story">
+          <div><h4>Problem</h4><p>Advertisers lose time diagnosing campaigns and manually implementing changes.</p></div>
+          <div><h4>P0 — Built</h4><p id="adpilot-p0">Gemini + OpenAI Agents SDK, multi-step tools, Streamlit, approval and audit.</p></div>
+          <div><h4>P0.5 — Learning</h4><p id="adpilot-p05">Improve account-wide candidate screening, donor/receiver data checks and quality evaluation. No measured lift yet.</p></div>
+          <div><h4>Current limitation</h4><p>Synthetic data; no live advertiser integration, validated marginal CPA or public prototype yet.</p></div>
+        </div>
       </article>
     </div></section>
 
@@ -66,5 +86,23 @@
     <section id="approach"><div class="wrap"><div class="section-head"><h2>How I work</h2><p>I use prototypes to make product judgment inspectable. Each version records its hypothesis, failure, revision, evidence, and remaining uncertainty.</p></div><div class="principles"><div class="principle"><h3>Start with the decision</h3><p>Define the customer choice and the information needed to improve it.</p></div><div class="principle"><h3>Evaluate the full chain</h3><p>Test interpretation, eligibility, ordering, explanation, and clarification—not only the final list.</p></div><div class="principle"><h3>Keep limitations visible</h3><p>Document what the evidence supports, what it does not, and what the next version must resolve.</p></div></div></div></section>
   </main>
   <footer class="wrap"><span>Husain Motiwala · Product Portfolio</span><span>Public work uses synthetic or non-confidential information.</span></footer>
+
+<script>
+// Public, non-sensitive status data. The static card above remains readable if the fetch fails.
+(async function syncAdPilotStatus(){
+  try{
+    const response=await fetch('https://raw.githubusercontent.com/husainim13-rocky/product-portfolio/main/adpilot/status.json',{cache:'no-store'});
+    if(!response.ok) return;
+    const item=await response.json();
+    if(item.project_id!=='adpilot') return;
+    const set=(id,value)=>{if(typeof value==='string'){const el=document.getElementById(id);if(el)el.textContent=value;}};
+    set('adpilot-stage','AdPilot · '+(item.stage||'Agentic Ads AI'));
+    set('adpilot-summary',item.summary);
+    set('adpilot-last-updated','Local, synthetic demo · Updated '+(item.updated_on||''));
+    set('adpilot-p0',item.p0?.achievements?.[0]||'Real LLM investigation and a human-approved sandbox change.');
+    set('adpilot-p05',item.p05?.findings?.[0]||'Quality and evidence evaluation in progress.');
+  }catch(_error){ /* Preserve the static verified summary */ }
+})();
+</script>
 </body>
 </html>
