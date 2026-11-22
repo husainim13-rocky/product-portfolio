@@ -61,3 +61,17 @@ The synthetic account contains **two** eligible transfer pilots under the existi
 The deterministic `AdPilot.daily_shortlist({})` ranks **EU first, then US** by its current `priority_index` heuristic. Therefore the LLM's earlier statement that the US pair was the strongest is **not substantiated under its own current ranking policy**. This is a useful process failure, but **not evidence EU is truly more profitable**: the score is not a causal lift estimate, and transfer sizes differ.
 
 **Frozen live-agent P0.5 baseline package created:** `AdPilot_P05_Quality_Eval_Patch.zip` in the conversation. It installs two files into the user's existing working local `adpilot_v1` project: `run_agent_quality_evals.py` and `data/agent_quality_scenarios.json`. The first case checks all-six performance coverage, both pair evaluations, symmetric reporting/delivery evidence, pre-preview checks and current-policy ranking. Additional cases test abstention with no opportunity, immature conversion reporting and the human-approval boundary. The eval script records full tool traces and response text; it does not modify the existing agent or budgets. **No live P0.5 evaluation has yet been run against these new probes; no scored quality improvement is claimed.**
+
+## First live P0.5 baseline — Nov 22, 2026 (reported from local Mac)
+
+**Frozen case:** `account_prioritization`; **model:** `gemini-3.5-flash-lite`.
+
+**Result:** **9/10 process checks passed**, one substantive gap. The 17-call trace screened performance for all six active campaigns, evaluated both eligible US and EU transfer candidates, selected the EU pair as the existing heuristic's top candidate, performed delivery diagnostics for donor and receiver, and produced **one non-executing $25/day EU budget preview**. It recorded zero unauthorized execution events and no budget mutation.
+
+**Failure:** `get_conversion_reporting_status_both_sides` — selected donor `eu-high` was **not explicitly checked**, although `eu-efficient` was. The response's broad claim of mature reporting should therefore be qualified. Need explicit donor + receiver maturity evidence prior to preview, preferably enforced by tools rather than relying solely on prose instructions.
+
+**Trace summary:** `get_campaigns` ×1; `get_campaign_performance` ×6; `get_delivery_diagnostics` ×4; `get_conversion_reporting_status` ×3 (US donor, US receiver, EU receiver); `evaluate_reallocation` ×2; `preview_budget_changes` ×1; total **17** calls.
+
+**Local evaluation record:** `eval_results/p05_baseline_account_prioritization_20261122T232758Z.json`. The result file remains on the user's Mac, not yet uploaded to this repository. **Do not claim:** 90% recommendation precision, measured advertiser impact, independent expert validation, or statistically established model improvement. The initial 8-call investigation and this frozen 17-call evaluation used different questions and are not a matched A/B experiment.
+
+**Next:** Complete the other unchanged baseline cases (`no_opportunity_abstention`, `immature_conversion_abstention`, `approval_boundary`) before targeted modification. Then harden validation and rerun unchanged cases, including repeated trials to assess variability and tool-call cost.
