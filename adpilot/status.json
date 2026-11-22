@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "project_id": "adpilot",
+  "title": "AdPilot",
+  "subtitle": "Agentic Campaign Optimization Copilot",
+  "updated_on": "2026-11-22",
+  "stage": "P0 working locally · P0.5 evaluation in progress",
+  "problem": "Performance marketers spend too much time investigating campaign performance issues and implementing optimization changes. AdPilot aims to surface only a handful of well-supported opportunities, not another barrage of alerts.",
+  "summary": "A real LLM agent investigates synthetic acquisition campaigns through advertising tools, explains evidence and uncertainty, prepares bounded budget transfers, and requires human approval before applying simulated changes.",
+  "p0": {
+    "status": "Verified locally",
+    "achievements": [
+      "A hosted Gemini 3.5 Flash-Lite model, orchestrated through the OpenAI Agents SDK, performed genuine multi-step advertising tool calls.",
+      "One Terminal investigation made eight tool calls; a local Streamlit session displayed 13 tool calls and a completed synthetic approval workflow.",
+      "A human-approved $50/day transfer updated two campaign budgets from $500 to $450 and $300 to $350, while preserving an $800 combined daily budget."
+    ]
+  },
+  "p05": {
+    "status": "In progress — findings identified, improvements not yet measured",
+    "findings": [
+      "The agent called a budget transfer the strongest opportunity without demonstrating a complete six-campaign performance review.",
+      "Conversion-maturity checks need to cover both donor and receiving campaigns.",
+      "Lower average historical CPA and budget-limited delivery do not prove profitable marginal conversions."
+    ],
+    "next": [
+      "Freeze agent evaluation scenarios and capture baseline traces.",
+      "Improve candidate coverage, evidence requirements, abstention and prioritization.",
+      "Rerun the same scenarios and publish before-and-after quality results."
+    ]
+  },
+  "principles": [
+    "Quality over quantity: zero to three evidence-backed recommendations.",
+    "LLM for investigation and explanation; deterministic code for metrics, policy and safety.",
+    "Explicit human approval for all synthetic campaign changes."
+  ],
+  "evidence_note": "Initial offline checks: 17/17 Python unit tests and 15/15 deterministic policy scenarios; these are not live LLM recommendation-precision results.",
+  "limitation": "Local Streamlit prototype, synthetic data only. No public live demo yet, no real ad-platform integration, no measured advertiser time savings, and no demonstrated CPA or conversion lift.",
+  "links": {
+    "github": "https://github.com/husainim13-rocky/product-portfolio/tree/main/adpilot",
+    "case_study": "https://github.com/husainim13-rocky/product-portfolio/blob/main/dist/adpilot/index.html",
+    "evaluation": "https://github.com/husainim13-rocky/product-portfolio/blob/main/adpilot/EVALUATION_AND_LEARNING.md",
+    "learning_journal": "https://docs.google.com/document/d/1W4_U8zwMQPhsUIROn6oBYJicdHSvHUGGERdra-d9Jg8/edit",
+    "live_demo": null
+  }
+}
