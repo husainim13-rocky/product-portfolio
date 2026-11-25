@@ -31,3 +31,9 @@
 ## Important publishing distinction
 
 Changes to the GitHub repository **do not publish the existing ChatGPT Site** automatically. The first update to the live Site must happen via its Site editor. If the public status-feed fetch works in the deployed Site, subsequent concise progress fields can be updated by editing `adpilot/status.json` on GitHub without republishing that text every time. Full layout or case-study changes still require a Site edit/publish.
+
+## November 24, 2026 — Next existing-Site content refresh (not yet published)
+
+The GitHub [case study](../dist/adpilot/index.html), [AdPilot README](README.md), [evaluation record](EVALUATION_AND_LEARNING.md) and public [status feed](status.json) now explain why the project intentionally began with a six-campaign P0, when P0.5 exposed model/tool orchestration cost and completeness constraints, and how these informed a **proposed** P1 design: paginated account retrieval → deterministic eligibility screening → bounded evidence shortlist → Gemini reasoning and optional deeper lookup. Communicate the product trade-off: filter out noise and reduce inference overhead without accidentally screening out valuable opportunities. Keep P0 verified sandbox behavior separate from P0.5 process-check evidence and the not-yet-built P1 roadmap. No proof of model-call savings, expert-rated improvement or CPA lift yet.
+
+**Work-mode publication task:** update the existing ChatGPT Sites AdPilot case-study page and homepage card (preserve live URL and all other project sections) using these current GitHub references. Verify the published page and whether the dynamic public status feed syncs. **Editing GitHub content alone does not establish that the live ChatGPT Site has changed.**
