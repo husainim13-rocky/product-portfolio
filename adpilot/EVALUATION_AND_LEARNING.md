@@ -1,6 +1,6 @@
 # AdPilot — Agent evaluation & learning
 
-**P0 verified functional workflow; P0.5 evidence-quality improvements are in progress. Updated November 22, 2026.**
+**P0 verified functional workflow; P0.5 evidence-quality improvements are in progress. Updated November 24, 2026.**
 
 ## Evaluation principles
 - Verify **tool selection and coverage** as well as the final prose answer.
@@ -16,7 +16,7 @@
 3. **Streamlit local workflow:** screenshot displayed 13 tool calls across the session, one synthetic action executed, updated daily budgets ($500→$450; $300→$350), an Action audit entry and no pending proposal.
 4. **Offline baseline:** 17/17 unit tests and 15/15 deterministic-policy scenarios passed in initial starter. These are **not** LLM recommendation-quality results.
 
-## Failure observations (not yet remediated and retested)
+## Initial failure observations (historical; see later versioned runs)
 - **Incomplete search:** the model labeled a pair the "strongest" opportunity, but the observed investigation didn't screen all six campaigns for performance.
 - **Asymmetric evidence:** only the receiving campaign's reporting maturity was explicitly checked in the observed eight-call trace.
 - **Marginal economics unknown:** supported caveats correctly distinguish historical CPA from marginal CPA; a budget-limited flag still doesn't prove profitable additional auction volume.
@@ -60,7 +60,7 @@ The synthetic account contains **two** eligible transfer pilots under the existi
 
 The deterministic `AdPilot.daily_shortlist({})` ranks **EU first, then US** by its current `priority_index` heuristic. Therefore the LLM's earlier statement that the US pair was the strongest is **not substantiated under its own current ranking policy**. This is a useful process failure, but **not evidence EU is truly more profitable**: the score is not a causal lift estimate, and transfer sizes differ.
 
-**Frozen live-agent P0.5 baseline package created:** `AdPilot_P05_Quality_Eval_Patch.zip` in the conversation. It installs two files into the user's existing working local `adpilot_v1` project: `run_agent_quality_evals.py` and `data/agent_quality_scenarios.json`. The first case checks all-six performance coverage, both pair evaluations, symmetric reporting/delivery evidence, pre-preview checks and current-policy ranking. Additional cases test abstention with no opportunity, immature conversion reporting and the human-approval boundary. The eval script records full tool traces and response text; it does not modify the existing agent or budgets. **No live P0.5 evaluation has yet been run against these new probes; no scored quality improvement is claimed.**
+**Frozen live-agent P0.5 baseline package created:** `AdPilot_P05_Quality_Eval_Patch.zip` in the conversation. It installs two files into the user's existing working local `adpilot_v1` project: `run_agent_quality_evals.py` and `data/agent_quality_scenarios.json`. The first case checks all-six performance coverage, both pair evaluations, symmetric reporting/delivery evidence, pre-preview checks and current-policy ranking. Additional cases test abstention with no opportunity, immature conversion reporting and the human-approval boundary. The eval script records full tool traces and response text; it does not modify the existing agent or budgets. **Historical note:** This was the status at creation of the evaluation package; later sections document live tests. No advertiser impact or expert-rated precision is claimed.
 
 ## First live P0.5 baseline — Nov 22, 2026 (reported from local Mac)
 
@@ -99,3 +99,32 @@ A prior 14-day window (Oct 19–Nov 1) would be mature as of Nov 22 under a ten-
 After the P0.5 workflow-gate fix, a live `account_prioritization` trace explicitly read maturity for both sides of the selected US transfer. It nevertheless selected US over the existing EU-first heuristic (EU priority 0.65, US 0.60); the old `selected_pair_matches_current_policy_priority` check failed. **PM decision:** Either candidate is acceptable in principle, **but** AdPilot must meaningfully compare both eligible options using observed mature CPA/conversion evidence, explain the selected-vs-alternative trade-off, and acknowledge uncertain marginal CPA/auction opportunity and donor losses. Larger permitted transfer is not evidence of higher incremental value. Higher volume supports sample confidence, not necessarily superior incremental economics.
 
 A separate **v2 rubric patch** was prepared locally (not uploaded to GitHub): it preserves the v1 frozen rubric, drops the forced heuristic-winner check, supplies candidate evidence and a **required human comparison-quality review** that remains pending until adjudicated. Regrade the saved Nov 24 trace offline before altering the agent. Automated safety/process pass counts must not be represented as recommendation precision or proof of uplift. No live model retest or real advertiser result is implied by this entry.
+
+## Architecture inflection point: evaluation exposed scaling constraints (November 24, 2026)
+
+**Why we deliberately began small (P0):** Six synthetic campaigns and per-campaign Python functions were the fastest falsifiable prototype for testing genuine LLM tool use, CPA interpretation, candidate eligibility, bounded preview, and a real human-approval boundary. Full bulk account retrieval was explicitly deferred until we knew the core workflow was worth improving. No real ad-network integration, incremental conversion lift, or advertiser time savings was established.
+
+**What changed in P0.5:** The first account review could describe a US budget transfer as the “strongest” after investigating only three of six performance records. A fuller Nov 22 run recorded **17 tool calls** to inspect all six and both eligible pairs; it passed 9/10 process checks but omitted an explicit maturity check for the selected EU donor. A workflow-gate fix enforced the agent's own donor-and-receiver reporting checks (local 22/22 unit tests; the next live trace observed both reads). The after-fix trace selected US instead of the EU-first deterministic priority index, revealing that the old rubric was **overfitting to a heuristic, not judging comparative business reasoning**. V2 regraded that saved trace at 10/10 automated process checks, while human comparative review remained pending: the answer largely described US rather than evidentially comparing US and EU.
+
+**The actual scaling signal:** After the requirement to compare both candidates was added to the prompt, a live run stopped at **15 maximum agent turns** before making a preview. A subsequent run with a 25-turn ceiling stopped at **Gemini API HTTP 429**, with the rate-limit dashboard showing 15/15 requests per minute (33.09K/250K tokens per minute; 45/500 requests per day). **Recorded tool calls are not equal to Gemini model calls**, and neither failure proves recommendation quality worsened; they demonstrate an orchestration/throughput constraint. Changing the turn ceiling is not an architectural fix.
+
+**Response at P0.5, proposed but not live-verified:** Prepare one account-wide synthetic evidence snapshot for six campaigns, assembled by deterministic code, so the model receives sufficiently complete facts with fewer back-and-forth tool rounds. The patch reportedly passed 25/25 local unit tests and 15/15 policy scenarios, but **has not yet demonstrated a lower live model-request count, latency, or improved comparative decision quality**. Preserve the previous traces and versioned rubrics for honest comparison.
+
+### P1 architecture proposal (not yet implemented)
+
+| Layer | Design intent | What can fail / evaluation responsibility |
+| --- | --- | --- |
+| Data ingestion | Paginated/batch fetch of many campaigns; normalize periods, currencies, statuses, edits, conversion reporting | Missing/stale/inconsistent records and API throughput; verify completeness and freshness |
+| Deterministic screening | Evaluate every campaign's objective, mature and representative data, conversion sample, budget policy and comparable transfer pairs | **False negatives**: valuable candidates discarded before the model sees them; measure candidate-level recall by segment |
+| Evidence shortlist | Rank a bounded set, e.g. 10–20 candidates (illustrative, not a universal K), with evidence and rejection context | Ranking bias toward large budgets; document rejected candidates and allow deeper retrieval |
+| Gemini investigation | Compare eligible alternatives, request specific additional evidence, articulate trade-offs and uncertain marginal performance | Missing counterfactuals, unsupported superiority claims, unnecessary calls; evaluate reasoning and latency |
+| Independent safeguard + approval | Revalidate eligibility and caps; require advertiser approval; audit any simulated/real execution | Unauthorized or unsupported financial actions; critical block/pause criteria |
+
+**PM evaluation plan at scale:** Maintain two complementary datasets: (1) representative account mixes (small/large, different geographies/spend, lag distributions, edit frequency) for realistic coverage and cost; (2) deliberately risk-weighted/edge scenarios (recent targeting changes, immature cohorts, low volume, incompatible markets, absent historical fallback, unknown auction opportunity) for critical safety coverage. Gold/acceptable behaviors are established using policy and expert review, not simply the same LLM's preferred answer. Measure **pre-screener opportunity recall**, supported-recommendation precision, top-3 usefulness, false abstention, explanation quality, end-to-end task completion, model requests/tokens/latency, quota/timeout rate and cost per review. Version fixtures and criteria; compare unchanged holdouts before and after engineering changes. Shadow mode on real accounts and a bounded human-approved pilot remain **future proposals**, not accomplishments.
+
+**P0.5 exit gate:** Install and live-test snapshot optimization without changing the quality standard; compare like-for-like account-prioritization traces for model/tool interactions and human-adjudicated US/EU reasoning, then run regression/abstention/approval-boundary cases. Do not declare an LLM precision improvement based on 10/10 automated process checks or infer CPA lift.
+
+### How to present this to a hiring manager
+
+> “I intentionally started with six synthetic campaigns to prove tool-calling and human-approved optimization rather than overbuilding platform scale. Our evaluations then exposed two separate problems: incomplete decision evidence and excessive model/tool back-and-forth. We added workflow safeguards and refined the evaluation from rigid heuristic matching toward evidence-backed alternatives. The high turn count and provider RPM limit informed a next architecture: deterministic bulk screening and shortlist generation, with LLM reasoning reserved for a few promising campaigns and on-demand deep dives. P1 will be judged not only by cost/latency, but also by whether prefiltering misses valuable opportunities. P0 is locally functional; P0.5 comparative quality improvement and P1 scale remain unverified.” 
+
