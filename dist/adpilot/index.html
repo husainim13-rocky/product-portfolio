@@ -10,10 +10,10 @@
 </style>
 </head>
 <body>
-<nav class="wrap"><a href="https://husain-motiwala-product-portfolio.husain-im13.chatgpt.site/">Husain Motiwala · Portfolio</a><div class="nav-right"><a href="#progress">Versions</a><a href="#evidence">Evidence</a><a href="#learning">Learning</a></div></nav>
+<nav class="wrap"><a href="https://husain-motiwala-product-portfolio.husain-im13.chatgpt.site/">Husain Motiwala · Portfolio</a><div class="nav-right"><a href="#progress">Versions</a><a href="#scale">Scale plan</a><a href="#evidence">Evidence</a><a href="#learning">Learning</a></div></nav>
 <main>
 <header class="wrap">
-<div class="eyebrow">Independent AI product build · November 22, 2026 <span class="status">P0 working locally · P0.5 in progress</span></div>
+<div class="eyebrow">Independent AI product build · Updated November 24, 2026 <span class="status">P0 working locally · P0.5 in progress</span></div>
 <h1>AdPilot</h1>
 <p class="lead">An agentic campaign optimization copilot that investigates advertising performance, surfaces a few defensible opportunities, and prepares changes that only an advertiser can approve.</p>
 <div class="actions"><a class="primary" href="https://github.com/husainim13-rocky/product-portfolio/tree/main/adpilot">Technical project</a><a href="https://docs.google.com/document/d/1W4_U8zwMQPhsUIROn6oBYJicdHSvHUGGERdra-d9Jg8/edit">Decision & learning journal</a><a href="#evidence">See evidence</a></div>
@@ -30,10 +30,27 @@
 <article class="phase"><strong>P0 · Functioning prototype (verified locally)</strong>
 <ul><li>Integrated a <strong>real hosted Gemini 3.5 Flash-Lite model</strong> with the OpenAI Agents SDK and Python advertising tools.</li><li>Observed an eight-tool campaign investigation in Terminal, including performance analysis, reporting checks, eligibility evaluation and a budget preview.</li><li>Delivered a Streamlit browser workflow with six synthetic campaigns, conversational investigation, a human approval step and sandbox action audit.</li><li>Confirmed updated daily budgets from <strong>$500 → $450</strong> and <strong>$300 → $350</strong>, preserving the $800 combined daily budget. One sandbox action was recorded.</li></ul>
 <p>This demonstrates a working tool-calling workflow, not validated recommendation quality or production scale.</p></article>
-<article class="phase"><strong>P0.5 · Evaluation and improvement (underway)</strong>
-<ul><li>Found that an agent can call an opportunity the “strongest” without examining all six campaigns.</li><li>Found incomplete evidence coverage: donor and receiver reporting maturity should both be checked before ranking or proposing a transfer.</li><li>Made uncertainty explicit: historical CPA and budget-limited flags do not establish profitable marginal conversions.</li><li>Defined the next evaluation suite: missed alternatives, incomplete conversion data, unsupported claims, no-opportunity abstention and recommendation overload.</li></ul>
-<p><strong class="caution">Not yet achieved:</strong> no measured before/after improvement in LLM recommendation precision, task success or customer time saved. Those are P0.5 deliverables.</p></article>
+<article class="phase"><strong>P0.5 · Agent quality and efficiency (underway)</strong>
+<ul><li>The first live account-prioritization probe passed <strong>9/10 process checks</strong> but skipped an explicit donor conversion-maturity read. A workflow validation fix was installed; <strong>22/22 local unit tests</strong> passed, and a later trace checked both sides.</li><li>We challenged a misleading “must choose EU” heuristic check. Regrading the saved US selection with a revised process rubric gave <strong>10/10 checks</strong>, but the independent US-versus-EU <strong>decision-quality review remained pending</strong>: the answer did not adequately compare both options.</li><li>Adding a stronger comparison instruction exposed orchestration costs: one run exceeded <strong>15 agent turns</strong>; another hit Gemini's <strong>15-requests/minute quota</strong>. These are runtime constraints, not proven recommendation inaccuracies.</li><li>A consolidated six-campaign snapshot tool has been prepared and offline-tested. Its real Gemini request savings and recommendation quality <strong>still need live verification</strong>.</li></ul>
+<p><strong class="caution">Still unproven:</strong> higher expert-rated recommendation precision, real advertiser value, measured model-request savings or conversion lift. We track these separately from successful process and policy tests.</p></article>
 </div>
+</section>
+
+<section class="wrap" id="scale">
+<h2>Why P0.5 changed the P1 architecture</h2>
+<p><strong>Deliberate P0 choice:</strong> Start with six synthetic campaigns and straightforward per-campaign tools to prove that a hosted LLM can investigate, propose a bounded optimization, and preserve human approval. Bulk retrieval for thousands of campaigns would have added complexity before the core workflow was verified.</p>
+<div class="cols">
+<article class="panel"><h3>P0 · Prove the workflow</h3><p>Validate genuine tool calls, campaign evidence, a non-executing proposal, and an auditable sandbox approval. The goal was functionality, not production scale or measured CPA improvement.</p></article>
+<article class="panel"><h3>P0.5 · Discover the constraint</h3><p>A fuller six-campaign evaluation recorded 17 tool calls. Explicit US/EU comparison then encountered a 15-turn ceiling and a separate Gemini 15-RPM limit. Investigation completeness and back-and-forth model orchestration became measurable product concerns.</p></article>
+<article class="panel"><h3>P1 · Proposed design, not built</h3><p>Fetch campaigns in backend batches, screen eligibility in conventional code, give Gemini a small evidence-rich shortlist, and allow focused follow-up lookups. Preserve independent safeguards and advertiser approval.</p></article>
+</div>
+<h3 style="margin-top:30px">Proposed flow for larger advertisers</h3>
+<div class="flow"><span>Bulk/paginated retrieval</span><em>→</em><span>Code-based eligibility screening</span><em>→</em><span>Evidence shortlist</span><em>→</em><span>Gemini comparison + optional deep dive</span><em>→</em><span>Guardrails + approval</span></div>
+<div class="details">
+<div class="panel"><h3>The trade-off</h3><p>We avoid sending every campaign's raw metrics to the model, reducing potential context and model-turn costs. But a strict prefilter could hide the best opportunity before Gemini sees it. Lower AI cost is not a win if decision quality or opportunity coverage declines.</p></div>
+<div class="panel"><h3>What P1 evaluation must prove</h3><p>Measure valuable-opportunity recall through the deterministic filter, supported top-3 recommendations, false abstention, safety, model calls/tokens, time-to-review and estimated cost across varied advertiser sizes. Compare against frozen cases and held-out examples, then validate in real-account shadow mode before any bounded pilot.</p></div>
+</div>
+<p class="note"><strong>Status:</strong> This is an evaluation-informed architecture roadmap, not a claim that a 1,000-campaign backend has been built. The P0.5 account-snapshot patch is prepared and tested offline; its live improvement remains to be demonstrated. <a href="https://github.com/husainim13-rocky/product-portfolio/blob/main/adpilot/EVALUATION_AND_LEARNING.md">Read the detailed evidence and evaluation plan</a>.</p>
 </section>
 <section class="wrap" id="evidence">
 <h2>Evidence from the first runs</h2>
@@ -57,7 +74,7 @@
 </section>
 <section class="wrap" id="next">
 <h2>Next release gate</h2>
-<p>Run the same evaluation scenarios before and after improving tool choice and evidence coverage; report actual pass rates and representative failures. Then publish a secured, resettable public prototype that hiring managers can try without local setup. The project will continue to disclose synthetic data, unsupported causal claims and unmeasured advertiser outcomes.</p>
+<p>Install the prepared six-campaign snapshot optimization and run the same frozen account-prioritization task. Compare complete versus partial investigations, model interaction count, process safeguards, and independently reviewed US/EU comparative reasoning. Rerun abstention and approval-boundary cases before claiming P0.5 progress. Production-scale P1 screening and any secured public demo remain future work; no measured advertiser time savings or CPA lift is claimed.</p>
 <div class="actions"><a class="primary" href="https://docs.google.com/document/d/1W4_U8zwMQPhsUIROn6oBYJicdHSvHUGGERdra-d9Jg8/edit">Read living learning journal</a><a href="https://github.com/husainim13-rocky/product-portfolio/blob/main/adpilot/EVALUATION_AND_LEARNING.md">Evaluation plan</a></div>
 </section>
 </main><footer class="wrap">AdPilot · Independent portfolio prototype · Synthetic data only · Not affiliated with advertising platforms mentioned.</footer>
