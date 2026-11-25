@@ -3,8 +3,8 @@
   "project_id": "adpilot",
   "title": "AdPilot",
   "subtitle": "Agentic Campaign Optimization Copilot",
-  "updated_on": "2026-11-22",
-  "stage": "P0 working locally · P0.5 evaluation in progress",
+  "updated_on": "2026-11-24",
+  "stage": "P0 verified locally · P0.5 evaluation in progress · P1 architecture planned",
   "problem": "Performance marketers spend too much time investigating campaign performance issues and implementing optimization changes. AdPilot aims to surface only a handful of well-supported opportunities, not another barrage of alerts.",
   "summary": "A real LLM agent investigates synthetic acquisition campaigns through advertising tools, explains evidence and uncertainty, prepares bounded budget transfers, and requires human approval before applying simulated changes.",
   "p0": {
@@ -16,16 +16,17 @@
     ]
   },
   "p05": {
-    "status": "In progress — findings identified, improvements not yet measured",
+    "status": "In progress — live process probes and workflow safeguard; comparative quality improvement unverified",
     "findings": [
-      "The agent called a budget transfer the strongest opportunity without demonstrating a complete six-campaign performance review.",
-      "Conversion-maturity checks need to cover both donor and receiving campaigns.",
-      "Lower average historical CPA and budget-limited delivery do not prove profitable marginal conversions."
+      "A live six-campaign review exposed uneven donor/receiver conversion checks; a workflow gate was installed and explicit two-sided maturity reads were subsequently observed.",
+      "A saved trace regraded at 10/10 revised automated process checks, but its US-versus-EU comparative reasoning remained incomplete; these are not recommendation-precision metrics.",
+      "An expanded comparison investigation exceeded the 15-turn ceiling, and a separate attempt hit the Gemini 15-RPM quota. Model requests are not identical to tool calls.",
+      "A six-campaign evidence snapshot improvement is prepared and offline-tested; live request savings and recommendation quality have not yet been verified."
     ],
     "next": [
-      "Freeze agent evaluation scenarios and capture baseline traces.",
-      "Improve candidate coverage, evidence requirements, abstention and prioritization.",
-      "Rerun the same scenarios and publish before-and-after quality results."
+      "Run the account-snapshot improvement on the frozen live-agent task and compare model requests/latency and human-reviewed US-versus-EU decision quality.",
+      "Rerun abstention and human-approval boundary regression cases and document remaining failures.",
+      "Keep process-rubric scores separate from independent recommendation-quality judgments and advertiser impact."
     ]
   },
   "principles": [
@@ -33,7 +34,7 @@
     "LLM for investigation and explanation; deterministic code for metrics, policy and safety.",
     "Explicit human approval for all synthetic campaign changes."
   ],
-  "evidence_note": "Initial offline checks: 17/17 Python unit tests and 15/15 deterministic policy scenarios; these are not live LLM recommendation-precision results.",
+  "evidence_note": "P0 local workflow demonstrated. P0.5 first prioritization run 9/10 process checks; revised rubric regraded a saved later trace at 10/10 process checks, with human decision-quality review still pending. No measured advertiser impact or expert-rated recommendation precision.",
   "limitation": "Local Streamlit prototype, synthetic data only. No public live demo yet, no real ad-platform integration, no measured advertiser time savings, and no demonstrated CPA or conversion lift.",
   "links": {
     "github": "https://github.com/husainim13-rocky/product-portfolio/tree/main/adpilot",
@@ -41,5 +42,11 @@
     "evaluation": "https://github.com/husainim13-rocky/product-portfolio/blob/main/adpilot/EVALUATION_AND_LEARNING.md",
     "learning_journal": "https://docs.google.com/document/d/1W4_U8zwMQPhsUIROn6oBYJicdHSvHUGGERdra-d9Jg8/edit",
     "live_demo": null
+  },
+  "p1": {
+    "status": "Proposed architecture; not built",
+    "decision": "Defer full-scale architecture until six-campaign agent usefulness and evaluation quality are demonstrated.",
+    "design": "Batch/paginated ingestion → deterministic eligibility screening and evidence shortlist → Gemini comparison and on-demand deeper investigation → independent safety rules and human approval.",
+    "eval_focus": "Pre-screening opportunity recall, supported recommendation quality, critical safety, latency, provider requests/tokens, and estimated cost at realistic account sizes."
   }
 }
